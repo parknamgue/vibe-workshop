@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>글자 수 세기</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+    textarea { width: 100%; height: 200px; padding: 8px; font-size: 16px; box-sizing: border-box; }
+    .result { margin-top: 12px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>글자 수 세기</h1>
+  <textarea id="text-input" placeholder="여기에 글을 입력하세요"></textarea>
+  <div class="result">
+    글자 수(공백 포함): <strong id="char-count">0</strong> ·
+    공백 제외: <strong id="char-count-no-space">0</strong>
+  </div>
+  <div class="result">단어 수: <strong id="word-count">0</strong></div>
+
+  <script>
+    const textInput = document.getElementById('text-input');
+    const charCount = document.getElementById('char-count');
+    const charCountNoSpace = document.getElementById('char-count-no-space');
+    const wordCount = document.getElementById('word-count');
+
+    // 한글·이모지도 1글자로 세기 위해 문자 단위로 나눈다
+    function countChars(text) {
+      return [...text].length;
+    }
+
+    // 띄어쓰기·줄바꿈·탭을 모두 공백으로 보고 뺀다
+    function countCharsWithoutSpaces(text) {
+      return countChars(text.replace(/\s/g, ''));
+    }
+
+    // 띄어쓰기·줄바꿈으로 나눈 덩어리를 단어로 본다. 연속 공백은 하나로 취급
+    function countWords(text) {
+      const trimmed = text.trim();
+      return trimmed === '' ? 0 : trimmed.split(/\s+/).length;
+    }
+
+    function updateCounts() {
+      charCount.textContent = countChars(textInput.value);
+      charCountNoSpace.textContent = countCharsWithoutSpaces(textInput.value);
+      wordCount.textContent = countWords(textInput.value);
+    }
+
+    textInput.addEventListener('input', updateCounts);
+    updateCounts();
+  </script>
+</body>
+</html>
